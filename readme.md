@@ -16,3 +16,7 @@ DB_PASS=""
 DATABASE=""
 DB_USERS_TABLE=""
 ```
+
+# TO-TO
+- [ ] DELETE 
+- [ ] UPDATE 
