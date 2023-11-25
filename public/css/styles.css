@@ -60,7 +60,7 @@ form {
 
 input[type="text"],
 input[type="password"],
-input[type="submit"] {
+input[type="submit"], button {
     width: calc(100% - 20px);
     padding: 10px;
     margin: 10px 0;
@@ -68,16 +68,18 @@ input[type="submit"] {
     border-radius: 3px;
 }
 
-input[type="submit"] {
+input[type="submit"], button {
     background-color: #4285F4;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-input[type="submit"]:hover {
+input[type="submit"]:hover, button:hover {
     background-color: #357ae8;
 }
+
+
 
 /* Error Message */
 .errormsg {

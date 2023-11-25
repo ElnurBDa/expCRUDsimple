@@ -36,6 +36,10 @@ app.get('/', (req,res) => {
     })
 })
 
+app.get('/create', (req,res) => {
+    res.render('create', {error: ''});
+});
+
 app.post('/submit', 
 body('username').trim().isLength({min:3, max:15}).escape().withMessage('Username should be between 3 and 15 symbols!'),
 body('surname').trim().isLength({min:5, max:15}).escape().withMessage('Surname should be between 5 and 15 symbols!'),
@@ -53,7 +57,6 @@ body('rpassword').trim().isLength({min:8}).matches('[0-9]').matches('[A-Z]').mat
         } 
         else {
             bcrypt.hash(req.body.password, 12).then(function(hashpass) {
-                console.log(req.body.name, req.body.email, req.body.username, hashpass);
                 let sql = `INSERT INTO ${process.env.DB_USERS_TABLE} (username, surname, department, password, user_type) VALUES (?, ?, ?, ?, ?)`;
                 conn.query(sql, [req.body.username, req.body.surname, req.body.department, hashpass, req.body.user_type], function(err, result){
                     if(err) throw err;

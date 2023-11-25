@@ -6,6 +6,8 @@
 </head>
 <body>
     <h1>Welcome to the users page</h1>   
+    <button onclick="window.location.href='/create'">Create User</button>
+    
     <% if(obj.users.length > 0) { %>
         <table>
             <thead>
@@ -33,5 +35,6 @@
         <p>No users found.</p>
     <% } %>
 
-</body>
-</html>
+
+    </body>
+    </html>
