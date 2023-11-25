@@ -17,6 +17,6 @@ DATABASE=""
 DB_USERS_TABLE=""
 ```
 
-# TO-TO
+# TO-DO
 - [ ] DELETE 
 - [ ] UPDATE 
