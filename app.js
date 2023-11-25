@@ -1,0 +1,73 @@
+const express = require('express');
+const { body, validationResult } = require('express-validator');
+const ejs = require('ejs');
+const path = require('path');
+const mysql = require('mysql2');
+const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
+const { valid } = require('joi');
+const dotenv = require('dotenv').config();
+
+
+const obj = {}
+
+const app = express();
+app.use(express.static(__dirname + '/public'));
+app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({extended: false}));
+
+const conn = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DATABASE,
+});
+
+conn.connect((err) => {
+    if (err) throw err;
+})
+
+
+app.get('/', (req,res) => {
+    conn.query(`select * from ${process.env.DB_USERS_TABLE}`, (err, result) => {
+        if (err) throw err;
+        obj.users = result;
+        res.render('read', {obj:obj});
+    })
+})
+
+app.post('/submit', 
+body('username').trim().isLength({min:3, max:15}).escape().withMessage('Username should be between 3 and 15 symbols!'),
+body('surname').trim().isLength({min:5, max:15}).escape().withMessage('Surname should be between 5 and 15 symbols!'),
+body('department').trim().escape(),
+body('user_type').trim().escape(),
+body('password').trim().isLength({min:8}).matches('[0-9]').matches('[A-Z]').matches('[a-z]').escape().withMessage('Password should be at least 8 symbols long and contain at least one digit, one lowercase and one uppercase symbol!'),
+body('rpassword').trim().isLength({min:8}).matches('[0-9]').matches('[A-Z]').matches('[a-z]').escape().withMessage('aaa!!'), 
+(req,res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.render('create', {error: errors.array()[0].msg});
+    } else {
+        if (req.body.password !== req.body.rpassword) {
+            res.render('create', {error: 'Passwords do not match!'});
+        } 
+        else {
+            bcrypt.hash(req.body.password, 12).then(function(hashpass) {
+                console.log(req.body.name, req.body.email, req.body.username, hashpass);
+                let sql = `INSERT INTO ${process.env.DB_USERS_TABLE} (username, surname, department, password, user_type) VALUES (?, ?, ?, ?, ?)`;
+                conn.query(sql, [req.body.username, req.body.surname, req.body.department, hashpass, req.body.user_type], function(err, result){
+                    if(err) throw err;
+                    res.redirect('/');
+                });
+            });
+        }
+    }    
+})
+
+
+
+
+
+const port = process.env.PORT || 3000;
+app.listen(port);
+console.log(`running server! on http://localhost:${port}`);
