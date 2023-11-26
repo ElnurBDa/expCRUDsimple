@@ -32,7 +32,7 @@ app.get('/', (req,res) => {
     conn.query(`select * from ${process.env.DB_USERS_TABLE}`, (err, result) => {
         if (err) throw err;
         obj.users = result;
-        res.render('read', {obj:obj});
+        res.render('index', {obj:obj});
     })
 })
 
@@ -69,6 +69,49 @@ body('rpassword').trim().isLength({min:8}).matches('[0-9]').matches('[A-Z]').mat
 
 
 
+app.get('/update/:id', (req,res) => {
+    const id = req.params.id;
+    res.render('update', {id:id, error: ''});
+})
+
+app.post('/update', 
+body('username').trim().isLength({min:3, max:15}).escape().withMessage('Username should be between 3 and 15 symbols!'),
+body('surname').trim().isLength({min:5, max:15}).escape().withMessage('Surname should be between 5 and 15 symbols!'),
+body('department').trim().escape(),
+body('user_type').trim().escape(),
+body('password').trim().isLength({min:8}).matches('[0-9]').matches('[A-Z]').matches('[a-z]').escape().withMessage('Password should be at least 8 symbols long and contain at least one digit, one lowercase and one uppercase symbol!'),
+body('rpassword').trim().isLength({min:8}).matches('[0-9]').matches('[A-Z]').matches('[a-z]').escape().withMessage('aaa!!'), 
+(req,res) => {
+    const id = req.body.id;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.render('update', {id:id, error: errors.array()[0].msg});
+    } else {
+        if (req.body.password !== req.body.rpassword) {
+            res.render('update', {id:id, error: 'Passwords do not match!'});
+        } 
+        else {
+            bcrypt.hash(req.body.password, 12).then(function(hashpass) {
+                let sql = `UPDATE ${process.env.DB_USERS_TABLE} SET username = ?, surname = ?, department = ?, password = ?, user_type = ? WHERE id = ?`;
+                conn.query(sql, [req.body.username, req.body.surname, req.body.department, hashpass, req.body.user_type, req.body.id], function(err, result){
+                    if(err) throw err;
+                    res.redirect('/');
+                });
+            });
+        }
+    }    
+})
+
+
+
+app.get('/delete/:id', (req,res) => {
+    const id = req.params.id;
+    let sql = `DELETE FROM ${process.env.DB_USERS_TABLE} WHERE id = ?`;
+    conn.query(sql, [id], function(err, result){
+        if(err) throw err;
+        res.redirect('/');
+    });
+})
 
 
 const port = process.env.PORT || 3000;

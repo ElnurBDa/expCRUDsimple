@@ -145,3 +145,20 @@ select:focus {
 form input {
     display: block;
 }
+
+.delete {
+    background-color: red;
+}
+
+
+table {
+    width: 100%;
+    table-layout: fixed; /* This ensures that the table layout is fixed */
+}
+th, td {
+    text-align: left;
+    overflow: hidden;
+}
+th {
+    width: 14%; /* Adjust the percentage based on your preference */
+}
