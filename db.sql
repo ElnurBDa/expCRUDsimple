@@ -1,5 +1,5 @@
-create database taskdb_1;
-use taskdb_1;
+create database DATABASE_NAME;
+use DATABASE_NAME;
 
 create table users (
     id int not null auto_increment,
