@@ -162,3 +162,15 @@ th, td {
 th {
     width: 14%; /* Adjust the percentage based on your preference */
 }
+
+.radio-container {
+    margin-left:5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.radio-container label {
+    margin-right: 10px;
+}

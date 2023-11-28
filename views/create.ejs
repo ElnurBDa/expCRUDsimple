@@ -16,7 +16,16 @@
         <input type="text" name="department" placeholder="Department" required />
         <input type="password" name="password" placeholder="Password" required />
         <input type="password" name="rpassword" placeholder="Repeat Password" required />
-        <input type="text" name="user_type" placeholder="User Type" required />
+        <div class="radio-container">
+            <label>
+                <input type="radio" name="user_type" value="admin" required />
+                Admin
+            </label>
+            <label>
+                <input type="radio" name="user_type" value="user" required />
+                User
+            </label>
+        </div>
         <input type="submit" value="Submit" />
     </form>
 </body>

@@ -46,7 +46,7 @@ body('surname').trim().isLength({min:5, max:15}).escape().withMessage('Surname s
 body('department').trim().escape(),
 body('user_type').trim().escape(),
 body('password').trim().isLength({min:8}).matches('[0-9]').matches('[A-Z]').matches('[a-z]').escape().withMessage('Password should be at least 8 symbols long and contain at least one digit, one lowercase and one uppercase symbol!'),
-body('rpassword').trim().isLength({min:8}).matches('[0-9]').matches('[A-Z]').matches('[a-z]').escape().withMessage('aaa!!'), 
+body('rpassword').trim().isLength({min:8}).matches('[0-9]').matches('[A-Z]').matches('[a-z]').escape().withMessage('Password should be at least 8 symbols long and contain at least one digit, one lowercase and one uppercase symbol!'), 
 (req,res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -80,7 +80,7 @@ body('surname').trim().isLength({min:5, max:15}).escape().withMessage('Surname s
 body('department').trim().escape(),
 body('user_type').trim().escape(),
 body('password').trim().isLength({min:8}).matches('[0-9]').matches('[A-Z]').matches('[a-z]').escape().withMessage('Password should be at least 8 symbols long and contain at least one digit, one lowercase and one uppercase symbol!'),
-body('rpassword').trim().isLength({min:8}).matches('[0-9]').matches('[A-Z]').matches('[a-z]').escape().withMessage('aaa!!'), 
+body('rpassword').trim().isLength({min:8}).matches('[0-9]').matches('[A-Z]').matches('[a-z]').escape().withMessage('Password should be at least 8 symbols long and contain at least one digit, one lowercase and one uppercase symbol!'), 
 (req,res) => {
     const id = req.body.id;
     const errors = validationResult(req);
@@ -111,6 +111,21 @@ app.get('/delete/:id', (req,res) => {
         if(err) throw err;
         res.redirect('/');
     });
+})
+
+
+app.get('/apishow', async (req,res) => {
+    const api = require('./api');
+    const apiData = await api.getJoke("love"); 
+    res.render('apishow', {apiData:apiData});
+});
+
+
+app.post('/apishow', async (req,res) => {
+    const api = require('./api');
+    const apiData = await api.getJoke(req.body.search); 
+    console.log(apiData);
+    res.render('apishow', {apiData:apiData});
 })
 
 

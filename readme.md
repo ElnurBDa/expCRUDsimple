@@ -14,5 +14,10 @@ DB_HOST=""
 DB_USER=""
 DB_PASS=""
 DATABASE=""
-DB_USERS_TABLE=""
+API_KEY=""
 ```
+
+# about api key
+it is from here:
+https://rapidapi.com/matchilling/api/chuck-norris/
+
